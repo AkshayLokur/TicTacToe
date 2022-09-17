@@ -1,6 +1,9 @@
+import sys
+
+
 def display(position_map):
     board = (f"""
-            {position_map[9]} | {position_map[8]} | {position_map[7]}
+            {position_map[7]} | {position_map[8]} | {position_map[9]}
             ----|-----|----
             {position_map[4]} | {position_map[5]} | {position_map[6]}
             ----|-----|----
@@ -25,13 +28,41 @@ def get_position(user_x_or_o, position_map):
     return position_map
 
 
+def check_in_range(start, end, step, user_x_or_o, position_map):
+    for i in range(start, end, step):
+        if position_map[i].strip() != user_x_or_o:
+            break
+    else:
+        print(f"{user_x_or_o} is a winner!")
+        sys.exit()
+
+
+def check_if_winner(user_x_or_o, position_map):
+    # Check horizontally
+    check_in_range(1, 4, 1, user_x_or_o, position_map)
+    check_in_range(4, 7, 1, user_x_or_o, position_map)
+    check_in_range(7, 10, 1, user_x_or_o, position_map)
+
+    # Check vertically
+    check_in_range(1, 8, 3, user_x_or_o, position_map)
+    check_in_range(2, 9, 3, user_x_or_o, position_map)
+    check_in_range(3, 10, 3, user_x_or_o, position_map)
+
+    # Check diagonally
+    check_in_range(1, 10, 4, user_x_or_o, position_map)
+    check_in_range(3, 8, 2, user_x_or_o, position_map)
+
+
 def start_game(position_map):
     game_on = True
     while game_on:
         position_map = get_position('X', position_map)
         display(position_map)
+        check_if_winner('X', position_map)
+
         position_map = get_position('O', position_map)
         display(position_map)
+        check_if_winner('O', position_map)
 
 
 if __name__ == '__main__':
